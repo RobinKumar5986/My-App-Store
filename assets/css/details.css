@@ -1,0 +1,427 @@
+/* ============================================================
+   details.css — App Detail Page Styles
+   AppVault Play Store
+   ============================================================ */
+
+/* ── Back Bar ── */
+.back-bar {
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: var(--transition);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: rgba(255,255,255,0.03);
+}
+
+.back-btn:hover {
+  color: var(--green-light);
+  border-color: var(--green-primary);
+  background: rgba(26,138,90,0.1);
+}
+
+.back-btn img {
+  width: 16px;
+  height: 16px;
+  filter: invert(1) opacity(0.6);
+  transition: var(--transition);
+}
+
+.back-btn:hover img {
+  filter: invert(62%) sepia(90%) saturate(400%) hue-rotate(110deg) brightness(1.1);
+}
+
+/* ── Detail Banner ── */
+.detail-banner {
+  width: 100%;
+  height: 320px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.detail-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,15,44,0.2) 0%,
+    rgba(10,15,44,0.85) 100%
+  );
+}
+
+/* ── App Header ── */
+.app-header {
+  padding: 0 2rem;
+  margin-top: -80px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.5s ease both;
+}
+
+.app-header-inner {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+}
+
+.app-header-icon {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: 3px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+  background: var(--navy-light);
+}
+
+.app-header-info {
+  flex: 1;
+  padding-bottom: 0.25rem;
+}
+
+.app-header-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 0.35rem;
+}
+
+.app-header-developer {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.app-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.app-header-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  padding-bottom: 0.25rem;
+  flex-shrink: 0;
+}
+
+/* ── Download Button ── */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.75rem;
+  background: var(--green-primary);
+  color: var(--white);
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: var(--transition);
+  box-shadow: 0 4px 20px rgba(26,138,90,0.4);
+  border: 1px solid transparent;
+}
+
+.download-btn:hover {
+  background: var(--green-light);
+  box-shadow: 0 4px 28px rgba(34,199,122,0.5);
+  transform: translateY(-2px);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.download-btn img {
+  width: 18px;
+  height: 18px;
+  filter: invert(1);
+}
+
+/* Share button */
+.share-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.share-btn:hover {
+  background: rgba(26,138,90,0.15);
+  border-color: var(--green-primary);
+}
+
+.share-btn img {
+  width: 18px;
+  height: 18px;
+  filter: invert(1) opacity(0.7);
+}
+
+/* ── Detail Layout ── */
+.detail-layout {
+  padding: 0 2rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
+  align-items: start;
+  animation: fadeUp 0.6s ease 0.1s both;
+}
+
+/* ── Info Panel (right sidebar) ── */
+.info-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: sticky;
+  top: 80px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Android badge in panel */
+.android-badge-wrap {
+  margin-top: 1.25rem;
+}
+
+.android-badge-wrap img {
+  width: 140px;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* ── Main Content ── */
+.detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+/* Description */
+.description-block h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.01em;
+}
+
+.description-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.description-text p + p {
+  margin-top: 0.75rem;
+}
+
+/* ── Screenshots Gallery ── */
+.screenshots-block h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.01em;
+}
+
+.screenshots-scroll {
+  display: flex;
+  gap: 0.875rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.screenshots-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.screenshots-scroll::-webkit-scrollbar-track {
+  background: var(--card-bg);
+  border-radius: 99px;
+}
+
+.screenshots-scroll::-webkit-scrollbar-thumb {
+  background: var(--green-dark);
+  border-radius: 99px;
+}
+
+.screenshot-item {
+  flex-shrink: 0;
+  width: 180px;
+  height: 390px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  scroll-snap-align: start;
+  background: var(--navy-light);
+  transition: var(--transition);
+}
+
+.screenshot-item:hover {
+  border-color: rgba(26,138,90,0.4);
+  transform: scale(1.02);
+}
+
+.screenshot-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Rating Block ── */
+.rating-block {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.rating-big {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 80px;
+}
+
+.rating-number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.rating-stars-big {
+  display: flex;
+  gap: 3px;
+}
+
+.rating-stars-big img {
+  width: 16px;
+  height: 16px;
+}
+
+.rating-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.rating-divider {
+  width: 1px;
+  height: 60px;
+  background: var(--card-border);
+}
+
+.rating-verified {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--green-light);
+}
+
+.rating-verified img {
+  width: 18px;
+  height: 18px;
+  filter: invert(62%) sepia(90%) saturate(400%) hue-rotate(110deg) brightness(1.1);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+  .info-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .back-bar,
+  .app-header,
+  .detail-layout {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .app-header-inner {
+    flex-wrap: wrap;
+  }
+  .app-header-actions {
+    width: 100%;
+  }
+  .detail-banner {
+    height: 220px;
+  }
+  .rating-block {
+    flex-wrap: wrap;
+  }
+}
