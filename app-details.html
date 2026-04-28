@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="App Details — AppVault">
+  <title>App Details — AppVault</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="generalImages/favicon.ico">
+  <link rel="icon" type="image/png"    href="generalImages/logo.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/details.css">
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════ -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-logo">
+      <img src="generalImages/logo.png"
+           alt="AppVault Logo"
+           onerror="this.style.display='none'">
+      <span>App<em>Vault</em></span>
+    </a>
+
+    <div class="search-bar">
+      <img class="search-icon"
+           src="generalImages/search-icon.svg"
+           alt="Search">
+      <input type="text"
+             placeholder="Search apps…"
+             autocomplete="off"
+             onkeydown="if(event.key==='Enter'){ window.location.href='index.html?q='+encodeURIComponent(this.value); }">
+    </div>
+
+    <div class="navbar-right">
+      <a href="index.html" class="nav-icon-btn" title="Home">
+        <img src="generalImages/back-arrow.svg" alt="Home">
+      </a>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       MAIN DETAIL CONTENT
+  ══════════════════════════════════════ -->
+  <main id="detail-main-content">
+
+    <!-- Back button -->
+    <div class="back-bar">
+      <a href="index.html" class="back-btn">
+        <img src="generalImages/back-arrow.svg" alt="Back">
+        Back to Apps
+      </a>
+    </div>
+
+    <!-- Banner -->
+    <div class="detail-banner">
+      <img id="detail-banner-img"
+           src="generalImages/default-banner.png"
+           alt="App Banner">
+      <div class="banner-overlay"></div>
+    </div>
+
+    <!-- App Header -->
+    <div class="app-header">
+      <div class="app-header-inner">
+
+        <!-- Icon -->
+        <img id="app-detail-icon"
+             class="app-header-icon"
+             src="generalImages/default-app-icon.png"
+             alt="App Icon">
+
+        <!-- Name / developer / meta -->
+        <div class="app-header-info">
+          <h1 class="app-header-name" id="app-detail-name">Loading…</h1>
+          <p class="app-header-developer" id="app-detail-developer"></p>
+          <div class="app-header-meta" id="app-detail-meta"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="app-header-actions">
+          <a id="download-btn"
+             class="download-btn"
+             href="#"
+             download>
+            <img src="generalImages/download-icon.svg" alt="Download">
+            <span>Download APK</span>
+          </a>
+          <button id="share-btn" class="share-btn" title="Share">
+            <img src="generalImages/share-icon.svg" alt="Share">
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Detail Layout -->
+    <div class="detail-layout">
+
+      <!-- ── Left: main content ── -->
+      <div class="detail-main">
+
+        <!-- Rating block -->
+        <div class="rating-block">
+          <div class="rating-big">
+            <span class="rating-number" id="rating-number">5.0</span>
+            <div id="rating-stars-big"></div>
+            <span class="rating-count"><span id="info-reviews">0</span> reviews</span>
+          </div>
+          <div class="rating-divider"></div>
+          <div class="rating-verified">
+            <img src="generalImages/verified-badge.svg" alt="Verified">
+            Verified &amp; Safe APK
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="description-block">
+          <h2>About this App</h2>
+          <div class="description-text" id="app-description">
+            <p>Loading description…</p>
+          </div>
+        </div>
+
+        <!-- Screenshots -->
+        <div class="screenshots-block">
+          <h2>Screenshots</h2>
+          <div class="screenshots-scroll" id="screenshots-scroll">
+            <!-- Populated by details.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Right: info panel ── -->
+      <aside class="info-panel">
+
+        <div class="info-row">
+          <span class="info-label">Version</span>
+          <span class="info-value" id="info-version">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Size</span>
+          <span class="info-value" id="info-size">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Updated</span>
+          <span class="info-value" id="info-updated">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Requires</span>
+          <span class="info-value" id="info-android">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Category</span>
+          <span class="info-value" id="info-category">—</span>
+        </div>
+
+        <!-- Android badge -->
+        <div class="android-badge-wrap">
+          <img src="generalImages/android-badge.png"
+               alt="Get it on Android"
+               onerror="this.style.display='none'">
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="footer">
+    <p>Built with ❤️ · <span>AppVault</span> · All APKs are safe and verified</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="app-data.js"></script>
+  <script src="assets/js/details.js"></script>
+</body>
+</html>
