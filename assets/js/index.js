@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cats = getCategories();
     filterBar.innerHTML = `
       <span class="filter-label">
-        <img src="generalImages/filter-icon.svg" alt="filter">
+        <img src="generalImages/filter.png" alt="filter">
         Filter
       </span>
     `;
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function starsHTML(rating) {
     let html = '<div class="stars">';
     for (let i = 1; i <= 5; i++) {
-      html += `<img src="generalImages/${i <= rating ? 'star-filled' : 'star-empty'}.svg" alt="${i <= rating ? 'filled' : 'empty'} star">`;
+      html += `<img src="generalImages/${i <= rating ? 'star-filled' : 'star-empty'}.png" alt="${i <= rating ? 'filled' : 'empty'} star">`;
     }
     html += `<span class="rating-text">${Number(rating).toFixed(1)}</span></div>`;
     return html;
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <button class="card-download-btn"
                     title="Download ${app.appName}"
                     onclick="event.stopPropagation(); downloadApp('${app.apkFile}', '${app.appName}')">
-              <img src="generalImages/download-icon.svg" alt="Download">
+              <img src="generalImages/download.png" alt="Download">
             </button>
           </div>
         </div>
