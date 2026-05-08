@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Set page title ──────────────────────────────────────────
   document.title = `${app.appName} — AppVault`;
 
+  // ── Lightbox State ──────────────────────────────────────────
+  let currentImgIdx = 0;
+  const screenshots = app.screenshots || [];
+
   // ── Functions ───────────────────────────────────────────────
 
   function populatePage(app) {
@@ -74,23 +78,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Share button
-    const shareBtn = document.getElementById('share-btn');
-    if (shareBtn) {
-      shareBtn.addEventListener('click', () => {
-        if (navigator.share) {
-          navigator.share({
-            title: app.appName,
-            text:  app.shortDescription || app.description || '',
-            url:   window.location.href
-          });
-        } else {
-          navigator.clipboard.writeText(window.location.href).then(() => {
-            shareBtn.title = 'Link copied!';
-            setTimeout(() => { shareBtn.title = 'Share'; }, 2000);
-          });
-        }
-      });
+    // Android Badge Redirect Logic
+    const badgeWrap = document.querySelector('.android-badge-wrap');
+    if (badgeWrap) {
+      if (app.playStoreLink) {
+        badgeWrap.style.display = 'flex';
+        badgeWrap.style.cursor = 'pointer';
+        badgeWrap.onclick = () => {
+          window.open(app.playStoreLink, '_blank');
+        };
+      } else {
+        badgeWrap.style.display = 'none';
+      }
     }
 
     // Description
@@ -112,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const item = document.createElement('div');
           item.className = 'screenshot-item';
           item.style.animationDelay = `${i * 80}ms`;
+          item.style.cursor = 'pointer';
           item.innerHTML = `
             <img src="${src}"
                  alt="Screenshot ${i + 1}"
@@ -119,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
           `;
           screenshotsEl.appendChild(item);
         });
+        // Initialize Lightbox if images exist
+        initLightbox();
       } else {
         // Show 3 placeholder screenshots
         screenshotsEl.innerHTML = [1, 2, 3].map(n => `
@@ -156,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imgSz = big ? 16 : 14;
     let html = `<div class="${size}" style="display:flex;align-items:center;gap:${big ? 3 : 2}px;">`;
     for (let i = 1; i <= 5; i++) {
-      html += `<img src="generalImages/${i <= rating ? 'star-filled' : 'star-empty'}.svg"
+      html += `<img src="generalImages/${i <= rating ? 'star-filled' : 'star-empty'}.png"
                     alt="star"
                     width="${imgSz}" height="${imgSz}">`;
     }
@@ -174,6 +176,88 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch {
       return dateStr;
     }
+  }
+
+  // ── Lightbox Logic ──────────────────────────────────────────
+  function initLightbox() {
+    if (document.querySelector('.lightbox-modal')) return;
+
+    const lb = document.createElement('div');
+    lb.className = 'lightbox-modal';
+    lb.innerHTML = `
+      <div class="lightbox-content">
+        <button class="lb-btn lb-prev">❮</button>
+        <img class="lightbox-img" src="" alt="Enlarged Screenshot">
+        <button class="lb-btn lb-next">❯</button>
+      </div>
+    `;
+    document.body.appendChild(lb);
+
+    const lbImg = lb.querySelector('.lightbox-img');
+    const prevBtn = lb.querySelector('.lb-prev');
+    const nextBtn = lb.querySelector('.lb-next');
+
+    document.getElementById('screenshots-scroll').addEventListener('click', (e) => {
+      const item = e.target.closest('.screenshot-item');
+      if (!item) return;
+      
+      const img = item.querySelector('img');
+      const src = img.getAttribute('src');
+      
+      if (src.includes('placeholder-screenshot.png')) return;
+
+      currentImgIdx = screenshots.indexOf(src);
+      if (currentImgIdx === -1) return;
+
+      updateLightbox();
+      lb.style.display = 'flex';
+      setTimeout(() => lb.classList.add('active'), 10);
+    });
+
+    function updateLightbox() {
+      lbImg.src = screenshots[currentImgIdx];
+      // Simple non-looping logic: disable buttons at bounds
+      prevBtn.disabled = (currentImgIdx === 0);
+      nextBtn.disabled = (currentImgIdx === screenshots.length - 1);
+    }
+
+    function showNext() {
+      if (currentImgIdx < screenshots.length - 1) {
+        currentImgIdx++;
+        updateLightbox();
+      }
+    }
+
+    function showPrev() {
+      if (currentImgIdx > 0) {
+        currentImgIdx--;
+        updateLightbox();
+      }
+    }
+
+    nextBtn.onclick = (e) => { e.stopPropagation(); showNext(); };
+    prevBtn.onclick = (e) => { e.stopPropagation(); showPrev(); };
+    
+    const closeLightbox = () => {
+      lb.classList.remove('active');
+      setTimeout(() => lb.style.display = 'none', 300);
+    };
+
+    // Close on clicking anywhere (the overlay)
+    lb.onclick = closeLightbox;
+    
+    // Stop image click from closing if you only want background to close, 
+    // but per your request "click anywhere closes", we leave it as is.
+    // If you want to click image to NOT close, uncomment the line below:
+    // lbImg.onclick = (e) => e.stopPropagation();
+
+    document.addEventListener('keydown', (e) => {
+      if (lb.style.display === 'flex') {
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'Escape') closeLightbox();
+      }
+    });
   }
 
   // ── Not found state ─────────────────────────────────────────

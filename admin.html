@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AppVault Admin — Add App</title>
+  <link rel="icon" href="generalImages/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <style>
+    /* Variables */
+    :root {
+      --green:        #1a8a5a;
+      --green-light:  #22c77a;
+      --green-glow:   rgba(26,138,90,0.2);
+      --navy:         #0a0f2c;
+      --navy-mid:     #0f1535;
+      --card:         #111827;
+      --card-2:       #161d42;
+      --border:       rgba(255,255,255,0.07);
+      --red:          #ef4444;
+      --red-soft:     rgba(239,68,68,0.12);
+      --amber:        #f59e0b;
+      --text:         #f9fafb;
+      --text-2:       #9ca3af;
+      --text-3:       #6b7280;
+      --radius:       12px;
+      --radius-lg:    18px;
+      --trans:        0.2s cubic-bezier(0.4,0,0.2,1);
+      --font-d:       'Syne', sans-serif;
+      --font-b:       'DM Sans', sans-serif;
+    }
+
+    /* Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--navy);
+      color: var(--text);
+      min-height: 100vh;
+      background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(26,138,90,0.12), transparent);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: var(--font-b); }
+    img { display: block; max-width: 100%; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--navy-mid); }
+    ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 99px; }
+
+    /* Layout */
+    .admin-shell {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: var(--navy-mid);
+      border-right: 1px solid var(--border);
+      padding: 1.75rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo img { height: 32px; width: auto; }
+
+    .sidebar-logo-text {
+      font-family: var(--font-d);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .sidebar-logo-text em { color: var(--green-light); font-style: normal; }
+
+    .sidebar-badge {
+      font-size: 0.6rem;
+      background: rgba(26,138,90,0.2);
+      color: var(--green-light);
+      border: 1px solid rgba(26,138,90,0.3);
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-left: auto;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.875rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-2);
+      transition: var(--trans);
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background: rgba(26,138,90,0.1);
+      color: var(--green-light);
+      border-color: rgba(26,138,90,0.2);
+    }
+
+    .nav-item .nav-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--text-3);
+      flex-shrink: 0;
+      transition: var(--trans);
+    }
+
+    .nav-item:hover .nav-dot,
+    .nav-item.active .nav-dot {
+      background: var(--green-light);
+      box-shadow: 0 0 6px var(--green-light);
+    }
+
+    .sidebar-stats {
+      margin-top: auto;
+      background: rgba(26,138,90,0.06);
+      border: 1px solid rgba(26,138,90,0.15);
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .sidebar-stat { display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-stat-label { font-size: 0.75rem; color: var(--text-3); }
+
+    .sidebar-stat-value {
+      font-family: var(--font-d);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--green-light);
+    }
+
+    .view-site-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-2);
+      transition: var(--trans);
+      margin-top: 0.5rem;
+    }
+
+    .view-site-btn:hover {
+      background: rgba(26,138,90,0.1);
+      border-color: rgba(26,138,90,0.3);
+      color: var(--green-light);
+    }
+
+    /* Main panel */
+    .main-panel { padding: 2rem 2.5rem; overflow-y: auto; }
+
+    /* Page header */
+    .page-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .page-title {
+      font-family: var(--font-d);
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .page-title span { color: var(--green-light); }
+    .page-subtitle { font-size: 0.85rem; color: var(--text-3); margin-top: 0.3rem; }
+
+    /* Panels */
+    .panel { display: none; }
+
+    .panel.active {
+      display: block;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* Form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-grid .span-2 { grid-column: 1 / -1; }
+
+    .form-section { margin-bottom: 2rem; }
+
+    .form-section-title {
+      font-family: var(--font-d);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green-light);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(26,138,90,0.2);
+    }
+
+    .field { display: flex; flex-direction: column; gap: 0.45rem; }
+
+    .field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-2);
+      letter-spacing: 0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .field label .required { color: var(--red); font-size: 0.7rem; }
+    .field label .hint { color: var(--text-3); font-weight: 400; font-size: 0.72rem; }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.875rem;
+      color: var(--text);
+      font-family: var(--font-b);
+      font-size: 0.875rem;
+      outline: none;
+      transition: var(--trans);
+      appearance: none;
+    }
+
+    /* Fix: select dropdown options must be dark */
+    .field select option {
+      background: #1a2035;
+      color: var(--text);
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--text-3); }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--green);
+      background: rgba(26,138,90,0.06);
+      box-shadow: 0 0 0 3px var(--green-glow);
+    }
+
+    .field textarea { min-height: 120px; resize: vertical; line-height: 1.65; }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.875rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    /* Rating slider */
+    .rating-field { display: flex; align-items: center; gap: 1rem; }
+
+    .rating-field input[type=range] {
+      flex: 1;
+      accent-color: var(--green-light);
+      height: 4px;
+      padding: 0;
+      border: none;
+      background: none;
+      box-shadow: none;
+    }
+
+    .rating-field input[type=range]:focus {
+      box-shadow: none;
+      border-color: transparent;
+      background: none;
+    }
+
+    .rating-display {
+      font-family: var(--font-d);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--green-light);
+      min-width: 28px;
+      text-align: center;
+    }
+
+    /* Featured toggle */
+    .toggle-field {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      padding: 0.75rem 0.875rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--trans);
+    }
+
+    .toggle-field:hover { border-color: rgba(26,138,90,0.3); }
+
+    .toggle-switch {
+      width: 40px;
+      height: 22px;
+      background: var(--card-2);
+      border-radius: 99px;
+      position: relative;
+      transition: var(--trans);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      width: 16px;
+      height: 16px;
+      background: var(--text-3);
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: var(--trans);
+    }
+
+    .toggle-field.on .toggle-switch {
+      background: rgba(26,138,90,0.3);
+      border-color: var(--green);
+    }
+
+    .toggle-field.on .toggle-switch::after {
+      left: 20px;
+      background: var(--green-light);
+    }
+
+    .toggle-text { font-size: 0.85rem; color: var(--text-2); }
+
+    .toggle-text strong {
+      color: var(--text);
+      font-weight: 600;
+      display: block;
+      font-size: 0.85rem;
+    }
+
+    /* Upload zones */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: var(--trans);
+      background: var(--card);
+      min-height: 130px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .upload-zone:hover {
+      border-color: var(--green);
+      background: rgba(26,138,90,0.05);
+    }
+
+    .upload-zone.has-file {
+      border-color: rgba(26,138,90,0.4);
+      border-style: solid;
+    }
+
+    .upload-zone input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: none;
+      background: none;
+    }
+
+    .upload-zone input[type=file]:focus { box-shadow: none; }
+
+    .upload-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(26,138,90,0.1);
+      border: 1px solid rgba(26,138,90,0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: var(--green-light);
+      font-weight: 700;
+    }
+
+    .upload-label { font-size: 0.82rem; color: var(--text-2); font-weight: 500; }
+    .upload-hint  { font-size: 0.72rem; color: var(--text-3); }
+
+    .upload-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      border-radius: calc(var(--radius-lg) - 2px);
+      display: none;
+    }
+
+    .upload-preview.visible { display: block; }
+
+    .upload-preview-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: calc(var(--radius-lg) - 2px);
+    }
+
+    .upload-zone:hover .upload-preview-overlay { display: flex; }
+
+    .upload-preview-overlay span {
+      font-size: 0.78rem;
+      color: white;
+      background: rgba(26,138,90,0.8);
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+
+    /* Screenshots grid */
+    .screenshots-preview-grid {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .screenshot-thumb-wrap {
+      position: relative;
+    }
+
+    .screenshot-thumb {
+      width: 60px;
+      height: 110px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .screenshot-remove {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      background: var(--red);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    /* Screenshots upload - separate button style so it works reliably */
+    .screenshots-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      background: var(--card);
+      transition: var(--trans);
+      text-align: center;
+    }
+
+    .screenshots-upload-area.drag-over {
+      border-color: var(--green);
+      background: rgba(26,138,90,0.06);
+    }
+
+    .screenshots-upload-area.has-files {
+      border-color: rgba(26,138,90,0.4);
+      border-style: solid;
+    }
+
+    .btn-pick-screenshots {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius);
+      background: rgba(26,138,90,0.15);
+      border: 1px solid rgba(26,138,90,0.3);
+      color: var(--green-light);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--trans);
+      font-family: var(--font-b);
+    }
+
+    .btn-pick-screenshots:hover {
+      background: rgba(26,138,90,0.25);
+    }
+
+    .screenshots-hint {
+      font-size: 0.72rem;
+      color: var(--text-3);
+      margin-top: 0.4rem;
+    }
+
+    .screenshots-count {
+      font-size: 0.75rem;
+      color: var(--green-light);
+      font-weight: 600;
+      margin-top: 0.4rem;
+    }
+
+    /* Submit row */
+    .submit-row {
+      margin-top: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-submit {
+      padding: 0.875rem 2.5rem;
+      background: var(--green);
+      color: white;
+      border-radius: var(--radius);
+      font-family: var(--font-d);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      transition: var(--trans);
+      box-shadow: 0 4px 20px rgba(26,138,90,0.35);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-submit:hover {
+      background: var(--green-light);
+      box-shadow: 0 4px 28px rgba(34,199,122,0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-reset {
+      padding: 0.875rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-2);
+      font-size: 0.875rem;
+      transition: var(--trans);
+    }
+
+    .btn-reset:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    /* Toast */
+    .toast-wrap {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      z-index: 9999;
+    }
+
+    .toast {
+      padding: 0.875rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      max-width: 380px;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: slideIn 0.3s ease both;
+      border: 1px solid;
+    }
+
+    .toast.success { background: rgba(26,138,90,0.15); border-color: rgba(26,138,90,0.4); color: #6ee7b7; }
+    .toast.error   { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); color: #fca5a5; }
+    .toast.loading { background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3); color: #fcd34d; }
+
+    .toast-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .toast-msg  { flex: 1; line-height: 1.5; }
+
+    @keyframes slideIn {
+      from { opacity:0; transform: translateX(20px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      display: none;
+      height: 4px;
+      background: var(--card-2);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .progress-bar-wrap.visible { display: block; }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--green-light));
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* App list */
+    .app-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .app-list-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--trans);
+    }
+
+    .app-list-item:hover { border-color: rgba(26,138,90,0.25); }
+
+    .app-list-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+    }
+
+    .app-list-info { flex: 1; min-width: 0; }
+
+    .app-list-name { font-family: var(--font-d); font-weight: 700; font-size: 0.9rem; }
+    .app-list-meta { font-size: 0.75rem; color: var(--text-3); margin-top: 2px; }
+
+    .app-list-actions { display: flex; gap: 0.5rem; }
+
+    .btn-delete {
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(239,68,68,0.3);
+      color: var(--red);
+      background: var(--red-soft);
+      transition: var(--trans);
+    }
+
+    .btn-delete:hover {
+      background: rgba(239,68,68,0.2);
+      border-color: var(--red);
+    }
+
+    .btn-edit {
+      padding: 5px 14px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(26,138,90,0.3);
+      color: var(--green-light);
+      background: rgba(26,138,90,0.08);
+      transition: var(--trans);
+    }
+
+    .btn-edit:hover {
+      background: rgba(26,138,90,0.18);
+      border-color: var(--green-light);
+    }
+
+    /* Edit modal overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--navy-mid);
+      border: 1px solid rgba(26,138,90,0.2);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      animation: fadeUp 0.25s ease both;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--navy-mid);
+      z-index: 1;
+    }
+
+    .modal-title {
+      font-family: var(--font-d);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .modal-title span { color: var(--green-light); }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--trans);
+    }
+
+    .modal-close:hover {
+      background: var(--red-soft);
+      border-color: rgba(239,68,68,0.3);
+      color: var(--red);
+    }
+
+    .modal-body { padding: 1.5rem; }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      position: sticky;
+      bottom: 0;
+      background: var(--navy-mid);
+    }
+
+    .btn-cancel {
+      padding: 0.65rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-2);
+      font-size: 0.875rem;
+      transition: var(--trans);
+    }
+
+    .btn-cancel:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .edit-note {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      padding: 0.6rem 0.875rem;
+      background: rgba(245,158,11,0.07);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: var(--radius);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ID chip */
+    .id-preview {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 3px 10px;
+      background: rgba(26,138,90,0.1);
+      border: 1px solid rgba(26,138,90,0.2);
+      border-radius: 99px;
+      font-size: 0.72rem;
+      color: var(--green-light);
+      font-family: monospace;
+      margin-top: 0.3rem;
+    }
+
+    /* Size display */
+    .size-display {
+      padding: 0.65rem 0.875rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      color: var(--text-3);
+      min-height: 42px;
+    }
+
+    .size-display.has-value { color: var(--green-light); font-weight: 600; }
+
+    /* Logs panel */
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .log-entry {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.875rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: var(--trans);
+    }
+
+    .log-entry:hover { border-color: rgba(26,138,90,0.2); }
+
+    .log-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .log-dot.add    { background: var(--green-light); box-shadow: 0 0 5px var(--green-light); }
+    .log-dot.delete { background: var(--red); }
+    .log-dot.edit   { background: #60a5fa; }
+    .log-dot.system { background: var(--amber); }
+
+    .log-body { flex: 1; min-width: 0; }
+
+    .log-action {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .log-detail {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      margin-top: 2px;
+    }
+
+    .log-time {
+      font-size: 0.72rem;
+      color: var(--text-3);
+      white-space: nowrap;
+      flex-shrink: 0;
+      font-family: monospace;
+    }
+
+    .logs-toolbar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+
+    .btn-clear-logs {
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: var(--red);
+      background: var(--red-soft);
+      font-size: 0.78rem;
+      font-weight: 600;
+      transition: var(--trans);
+      margin-left: auto;
+    }
+
+    .btn-clear-logs:hover {
+      background: rgba(239,68,68,0.2);
+      border-color: var(--red);
+    }
+
+    .log-filter {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .filter-btn {
+      padding: 0.35rem 0.875rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      color: var(--text-3);
+      transition: var(--trans);
+      background: none;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      border-color: rgba(26,138,90,0.4);
+      color: var(--green-light);
+      background: rgba(26,138,90,0.1);
+    }
+    @media (max-width: 900px) {
+      .admin-shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: static;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 1rem;
+        gap: 0.5rem;
+      }
+      .sidebar-logo { padding-bottom: 0; border-bottom: none; }
+      .sidebar-stats, .view-site-btn { display: none; }
+      .sidebar-nav { flex-direction: row; flex-wrap: wrap; }
+      .main-panel { padding: 1.25rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .span-2 { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="admin-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="generalImages/logo.png" alt="Logo" onerror="this.style.display='none'">
+      <span class="sidebar-logo-text">App<em>Vault</em></span>
+      <span class="sidebar-badge">Admin</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-item active" data-panel="add-panel">
+        <span class="nav-dot"></span>
+        Add New App
+      </div>
+      <div class="nav-item" data-panel="manage-panel">
+        <span class="nav-dot"></span>
+        Manage Apps
+      </div>
+      <div class="nav-item" data-panel="logs-panel">
+        <span class="nav-dot"></span>
+        Logs
+      </div>
+    </nav>
+
+    <div class="sidebar-stats">
+      <div class="sidebar-stat">
+        <span class="sidebar-stat-label">Total Apps</span>
+        <span class="sidebar-stat-value" id="sidebar-total">—</span>
+      </div>
+      <div class="sidebar-stat">
+        <span class="sidebar-stat-label">Categories</span>
+        <span class="sidebar-stat-value" id="sidebar-cats">—</span>
+      </div>
+    </div>
+
+    <a href="index.html" target="_blank" class="view-site-btn">
+      View Live Site
+    </a>
+  </aside>
+
+  <!-- Main panel -->
+  <main class="main-panel">
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Add <span>New App</span></h1>
+        <p class="page-subtitle">Fill in all fields, upload images and APK, then submit.</p>
+      </div>
+    </div>
+
+    <!-- Add App panel -->
+    <div class="panel active" id="add-panel">
+      <form id="add-app-form" enctype="multipart/form-data">
+
+        <!-- App Info -->
+        <div class="form-section">
+          <div class="form-section-title">App Information</div>
+          <div class="form-grid">
+
+            <div class="field">
+              <label>App Name <span class="required">*</span></label>
+              <input type="text" name="appName" id="appName" placeholder="e.g. My Awesome App" required>
+              <div id="id-preview" class="id-preview" style="display:none;">ID: <span id="id-preview-val"></span></div>
+            </div>
+
+            <div class="field">
+              <label>Developer / Author <span class="required">*</span></label>
+              <input type="text" name="developer" value="Robin Kumar" required>
+            </div>
+
+            <div class="field">
+              <label>Category / Type <span class="required">*</span></label>
+              <select name="type" id="type-select" required>
+                <option value="">Select category...</option>
+                <option value="Utility">Utility</option>
+                <option value="Game">Game</option>
+                <option value="Productivity">Productivity</option>
+                <option value="Education">Education</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Finance">Finance</option>
+                <option value="Health">Health &amp; Fitness</option>
+                <option value="Social">Social</option>
+                <option value="Tools">Tools</option>
+                <option value="Other">Other</option>
+                <option value="custom">+ Custom...</option>
+              </select>
+            </div>
+
+            <div class="field" id="custom-type-field" style="display:none;">
+              <label>Custom Category</label>
+              <input type="text" name="typeCustom" placeholder="Enter custom category">
+            </div>
+
+            <div class="field">
+              <label>Version <span class="hint">(e.g. 1.0.0)</span></label>
+              <input type="text" name="version" placeholder="1.0.0" value="1.0.0">
+            </div>
+
+            <div class="field span-2">
+              <label>Play Store Link <span class="hint">(optional — live Google Play URL)</span></label>
+              <input type="url" name="playStoreLink" placeholder="https://play.google.com/store/apps/details?id=com.example.app">
+            </div>
+
+            <!-- App size is auto-calculated from APK, shown as read-only -->
+            <div class="field">
+              <label>App Size <span class="hint">(auto from APK)</span></label>
+              <div class="size-display" id="size-display">Upload APK to calculate</div>
+              <input type="hidden" name="size" id="size-hidden">
+            </div>
+
+            <div class="field">
+              <label>Min Android Version <span class="hint">(e.g. 6.0)</span></label>
+              <input type="text" name="minAndroid" placeholder="6.0" value="5.0">
+            </div>
+
+            <div class="field">
+              <label>Last Updated</label>
+              <input type="date" name="lastUpdated" id="lastUpdated">
+            </div>
+
+            <div class="field span-2">
+              <label>Rating <span class="hint">(1 – 5)</span></label>
+              <div class="rating-field">
+                <input type="range" name="rating" id="rating-range" min="1" max="5" step="0.1" value="5">
+                <span class="rating-display" id="rating-display">5.0</span>
+              </div>
+            </div>
+
+            <div class="field span-2">
+              <label>Featured App</label>
+              <div class="toggle-field" id="featured-toggle">
+                <div class="toggle-switch"></div>
+                <div class="toggle-text">
+                  <strong id="featured-label">Not Featured</strong>
+                  Show in featured section on homepage
+                </div>
+              </div>
+              <input type="hidden" name="featured" id="featured-val" value="false">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Descriptions -->
+        <div class="form-section">
+          <div class="form-section-title">Descriptions</div>
+          <div class="form-grid">
+
+            <div class="field span-2">
+              <label>Short Description <span class="hint">(shown on home card, max 100 chars)</span></label>
+              <input type="text" name="shortDescription" placeholder="A brief one-liner about the app..." maxlength="100">
+            </div>
+
+            <div class="field span-2">
+              <label>Full Description <span class="required">*</span> <span class="hint">(shown on detail page)</span></label>
+              <textarea name="description" placeholder="Write a detailed description of the app." required></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Images -->
+        <div class="form-section">
+          <div class="form-section-title">Images</div>
+          <div class="form-grid">
+
+            <div class="field">
+              <label>Home Card Image <span class="required">*</span> <span class="hint">(16:9 ratio)</span></label>
+              <div class="upload-zone" id="zone-home">
+                <img class="upload-preview" id="prev-home" alt="">
+                <div class="upload-preview-overlay"><span>Change Image</span></div>
+                <div class="upload-icon">img</div>
+                <span class="upload-label">Click to upload</span>
+                <span class="upload-hint">PNG, JPG — shown on app card</span>
+                <input type="file" name="homePageImage" accept="image/*" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label>App Icon <span class="required">*</span> <span class="hint">(square, 512x512 ideal)</span></label>
+              <div class="upload-zone" id="zone-icon">
+                <img class="upload-preview" id="prev-icon" alt="">
+                <div class="upload-preview-overlay"><span>Change Image</span></div>
+                <div class="upload-icon">ico</div>
+                <span class="upload-label">Click to upload</span>
+                <span class="upload-hint">PNG — large icon on detail page</span>
+                <input type="file" name="detailIcon" accept="image/*" required>
+              </div>
+            </div>
+
+            <div class="field span-2">
+              <label>Description Banner <span class="required">*</span> <span class="hint">(1024x500 ideal, wide banner)</span></label>
+              <div class="upload-zone" id="zone-banner" style="min-height:160px;">
+                <img class="upload-preview" id="prev-banner" alt="">
+                <div class="upload-preview-overlay"><span>Change Image</span></div>
+                <div class="upload-icon">ban</div>
+                <span class="upload-label">Click to upload</span>
+                <span class="upload-hint">PNG, JPG — banner at top of detail page</span>
+                <input type="file" name="descriptionBanner" accept="image/*" required>
+              </div>
+            </div>
+
+            <div class="field span-2">
+              <label>Screenshots <span class="hint">(optional, up to 10, portrait 390x844 ideal)</span></label>
+              <div class="screenshots-upload-area" id="screenshots-drop-area">
+                <button type="button" class="btn-pick-screenshots" id="btn-pick-screenshots">
+                  Choose Screenshots
+                </button>
+                <input type="file" name="screenshots" accept="image/*" multiple id="screenshots-input" style="display:none;">
+                <div class="screenshots-hint">PNG, JPG — shown in screenshot gallery. You can select multiple files at once.</div>
+                <div class="screenshots-count" id="screenshots-count" style="display:none;"></div>
+              </div>
+              <div class="screenshots-preview-grid" id="screenshots-preview"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- APK -->
+        <div class="form-section">
+          <div class="form-section-title">APK File</div>
+          <div class="form-grid">
+
+            <div class="field span-2">
+              <label>APK File <span class="required">*</span></label>
+              <div class="upload-zone" id="zone-apk" style="min-height:100px;">
+                <div class="upload-icon" id="apk-icon">apk</div>
+                <span class="upload-label" id="apk-label">Click to upload APK</span>
+                <span class="upload-hint">.apk files only</span>
+                <input type="file" name="apkFile" accept=".apk" required id="apk-input">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-row">
+          <button type="submit" class="btn-submit" id="submit-btn">
+            Add App to Store
+          </button>
+          <button type="button" class="btn-reset" id="reset-btn">Reset Form</button>
+        </div>
+
+        <div class="progress-bar-wrap" id="progress-wrap">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Manage Apps panel -->
+    <div class="panel" id="manage-panel">
+      <div class="page-header" style="margin-bottom:1.5rem;">
+        <div>
+          <h1 class="page-title">Manage <span>Apps</span></h1>
+          <p class="page-subtitle">View and remove apps from the store.</p>
+        </div>
+        <button class="btn-submit" onclick="loadAppList()" style="padding:0.6rem 1.25rem;font-size:0.82rem;">
+          Refresh
+        </button>
+      </div>
+      <div class="app-list" id="app-list">
+        <div class="empty-list">Loading apps...</div>
+      </div>
+    </div>
+
+    <!-- Logs panel -->
+    <div class="panel" id="logs-panel">
+      <div class="page-header" style="margin-bottom:1.5rem;">
+        <div>
+          <h1 class="page-title">Activity <span>Logs</span></h1>
+          <p class="page-subtitle">Record of all add, delete and system events.</p>
+        </div>
+      </div>
+      <div class="logs-toolbar">
+        <div class="log-filter">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="add">Added</button>
+          <button class="filter-btn" data-filter="edit">Edited</button>
+          <button class="filter-btn" data-filter="delete">Deleted</button>
+          <button class="filter-btn" data-filter="system">System</button>
+        </div>
+        <button class="btn-clear-logs" id="btn-clear-logs">Clear All Logs</button>
+      </div>
+      <div class="log-list" id="log-list">
+        <div class="empty-list">No logs yet.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Edit App Modal -->
+<div class="modal-overlay" id="edit-modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Edit <span>App</span></div>
+      <button class="modal-close" id="modal-close-btn">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="edit-note">
+        Note: To replace images or the APK file, upload new files below. Leave file fields empty to keep existing files.
+      </div>
+      <form id="edit-app-form" enctype="multipart/form-data">
+        <input type="hidden" name="appId" id="edit-appId">
+
+        <!-- Basic info -->
+        <div class="form-section">
+          <div class="form-section-title">App Information</div>
+          <div class="form-grid">
+
+            <div class="field">
+              <label>App Name <span class="required">*</span></label>
+              <input type="text" name="appName" id="edit-appName" required>
+            </div>
+
+            <div class="field">
+              <label>Developer / Author <span class="required">*</span></label>
+              <input type="text" name="developer" id="edit-developer" required>
+            </div>
+
+            <div class="field">
+              <label>Category / Type <span class="required">*</span></label>
+              <select name="type" id="edit-type" required>
+                <option value="">Select category...</option>
+                <option value="Utility">Utility</option>
+                <option value="Game">Game</option>
+                <option value="Productivity">Productivity</option>
+                <option value="Education">Education</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Finance">Finance</option>
+                <option value="Health">Health &amp; Fitness</option>
+                <option value="Social">Social</option>
+                <option value="Tools">Tools</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label>Version</label>
+              <input type="text" name="version" id="edit-version" placeholder="1.0.0">
+            </div>
+
+            <div class="field">
+              <label>Min Android Version</label>
+              <input type="text" name="minAndroid" id="edit-minAndroid" placeholder="5.0">
+            </div>
+
+            <div class="field">
+              <label>Last Updated</label>
+              <input type="date" name="lastUpdated" id="edit-lastUpdated">
+            </div>
+
+            <div class="field span-2">
+              <label>Play Store Link <span class="hint">(optional)</span></label>
+              <input type="url" name="playStoreLink" id="edit-playStoreLink" placeholder="https://play.google.com/store/apps/details?id=...">
+            </div>
+
+            <div class="field span-2">
+              <label>Rating <span class="hint">(1 – 5)</span></label>
+              <div class="rating-field">
+                <input type="range" name="rating" id="edit-rating-range" min="1" max="5" step="0.1" value="5">
+                <span class="rating-display" id="edit-rating-display">5.0</span>
+              </div>
+            </div>
+
+            <div class="field span-2">
+              <label>Featured App</label>
+              <div class="toggle-field" id="edit-featured-toggle">
+                <div class="toggle-switch"></div>
+                <div class="toggle-text">
+                  <strong id="edit-featured-label">Not Featured</strong>
+                  Show in featured section on homepage
+                </div>
+              </div>
+              <input type="hidden" name="featured" id="edit-featured-val" value="false">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Descriptions -->
+        <div class="form-section">
+          <div class="form-section-title">Descriptions</div>
+          <div class="form-grid">
+            <div class="field span-2">
+              <label>Short Description <span class="hint">(max 100 chars)</span></label>
+              <input type="text" name="shortDescription" id="edit-shortDescription" maxlength="100">
+            </div>
+            <div class="field span-2">
+              <label>Full Description <span class="required">*</span></label>
+              <textarea name="description" id="edit-description" required></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Replace images (optional) -->
+        <div class="form-section">
+          <div class="form-section-title">Replace Images (optional)</div>
+          <div class="form-grid">
+
+            <div class="field">
+              <label>Home Card Image <span class="hint">(leave empty to keep current)</span></label>
+              <div class="upload-zone" id="edit-zone-home">
+                <img class="upload-preview" id="edit-prev-home" alt="">
+                <div class="upload-preview-overlay"><span>Change Image</span></div>
+                <div class="upload-icon">img</div>
+                <span class="upload-label">Click to replace</span>
+                <span class="upload-hint">PNG, JPG</span>
+                <input type="file" name="homePageImage" accept="image/*">
+              </div>
+            </div>
+
+            <div class="field">
+              <label>App Icon <span class="hint">(leave empty to keep current)</span></label>
+              <div class="upload-zone" id="edit-zone-icon">
+                <img class="upload-preview" id="edit-prev-icon" alt="">
+                <div class="upload-preview-overlay"><span>Change Image</span></div>
+                <div class="upload-icon">ico</div>
+                <span class="upload-label">Click to replace</span>
+                <span class="upload-hint">PNG</span>
+                <input type="file" name="detailIcon" accept="image/*">
+              </div>
+            </div>
+
+            <div class="field span-2">
+              <label>Description Banner <span class="hint">(leave empty to keep current)</span></label>
+              <div class="upload-zone" id="edit-zone-banner" style="min-height:140px;">
+                <img class="upload-preview" id="edit-prev-banner" alt="">
+                <div class="upload-preview-overlay"><span>Change Image</span></div>
+                <div class="upload-icon">ban</div>
+                <span class="upload-label">Click to replace</span>
+                <span class="upload-hint">PNG, JPG</span>
+                <input type="file" name="descriptionBanner" accept="image/*">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Replace APK (optional) -->
+        <div class="form-section">
+          <div class="form-section-title">Replace APK (optional)</div>
+          <div class="form-grid">
+            <div class="field span-2">
+              <div class="upload-zone" id="edit-zone-apk" style="min-height:90px;">
+                <div class="upload-icon" id="edit-apk-icon">apk</div>
+                <span class="upload-label" id="edit-apk-label">Click to replace APK</span>
+                <span class="upload-hint">.apk files only — leave empty to keep current</span>
+                <input type="file" name="apkFile" accept=".apk" id="edit-apk-input">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="modal-cancel-btn">Cancel</button>
+      <button class="btn-submit" id="edit-save-btn" style="padding:0.65rem 1.75rem;font-size:0.875rem;">
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+  // Panel navigation
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById(item.dataset.panel).classList.add('active');
+      if (item.dataset.panel === 'manage-panel') loadAppList();
+    });
+  });
+
+  // Set today's date
+  document.getElementById('lastUpdated').valueAsDate = new Date();
+
+  // Auto ID preview from app name
+  document.getElementById('appName').addEventListener('input', function () {
+    const slug = slugify(this.value);
+    const preview = document.getElementById('id-preview');
+    const val = document.getElementById('id-preview-val');
+    if (slug) {
+      preview.style.display = 'inline-flex';
+      val.textContent = slug;
+    } else {
+      preview.style.display = 'none';
+    }
+  });
+
+  function slugify(text) {
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  // Custom category toggle
+  document.getElementById('type-select').addEventListener('change', function () {
+    document.getElementById('custom-type-field').style.display = this.value === 'custom' ? 'flex' : 'none';
+  });
+
+  // Rating slider
+  const ratingRange = document.getElementById('rating-range');
+  const ratingDisplay = document.getElementById('rating-display');
+  ratingRange.addEventListener('input', () => {
+    ratingDisplay.textContent = parseFloat(ratingRange.value).toFixed(1);
+  });
+
+  // Featured toggle
+  const featuredToggle = document.getElementById('featured-toggle');
+  const featuredVal = document.getElementById('featured-val');
+  const featuredLabel = document.getElementById('featured-label');
+  featuredToggle.addEventListener('click', () => {
+    const isOn = featuredToggle.classList.toggle('on');
+    featuredVal.value = isOn ? 'true' : 'false';
+    featuredLabel.textContent = isOn ? 'Featured' : 'Not Featured';
+  });
+
+  // Image preview setup
+  function setupImagePreview(inputName, previewId, zoneId) {
+    const zone = document.getElementById(zoneId);
+    const input = zone.querySelector('input[type=file]');
+    const prev = document.getElementById(previewId);
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (!file) return;
+      prev.src = URL.createObjectURL(file);
+      prev.classList.add('visible');
+      zone.classList.add('has-file');
+    });
+  }
+
+  setupImagePreview('homePageImage', 'prev-home', 'zone-home');
+  setupImagePreview('detailIcon', 'prev-icon', 'zone-icon');
+  setupImagePreview('descriptionBanner', 'prev-banner', 'zone-banner');
+
+  // Screenshots - use a real button to trigger the hidden input
+  const screenshotsInput = document.getElementById('screenshots-input');
+  const screenshotsDropArea = document.getElementById('screenshots-drop-area');
+  let screenshotFiles = []; // keep our own array so we can remove individual ones
+
+  document.getElementById('btn-pick-screenshots').addEventListener('click', () => {
+    screenshotsInput.click();
+  });
+
+  // Drag and drop support
+  screenshotsDropArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    screenshotsDropArea.classList.add('drag-over');
+  });
+  screenshotsDropArea.addEventListener('dragleave', () => screenshotsDropArea.classList.remove('drag-over'));
+  screenshotsDropArea.addEventListener('drop', e => {
+    e.preventDefault();
+    screenshotsDropArea.classList.remove('drag-over');
+    const dropped = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+    addScreenshots(dropped);
+  });
+
+  screenshotsInput.addEventListener('change', function () {
+    addScreenshots(Array.from(this.files));
+    this.value = ''; // reset so same files can be re-selected if needed
+  });
+
+  function addScreenshots(files) {
+    files.forEach(file => {
+      if (screenshotFiles.length >= 10) return;
+      screenshotFiles.push(file);
+    });
+    renderScreenshotPreviews();
+  }
+
+  function renderScreenshotPreviews() {
+    const grid = document.getElementById('screenshots-preview');
+    const count = document.getElementById('screenshots-count');
+    grid.innerHTML = '';
+
+    screenshotFiles.forEach((file, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'screenshot-thumb-wrap';
+
+      const img = document.createElement('img');
+      img.className = 'screenshot-thumb';
+      img.src = URL.createObjectURL(file);
+
+      const rm = document.createElement('div');
+      rm.className = 'screenshot-remove';
+      rm.textContent = 'x';
+      rm.title = 'Remove';
+      rm.addEventListener('click', () => {
+        screenshotFiles.splice(i, 1);
+        renderScreenshotPreviews();
+      });
+
+      wrap.appendChild(img);
+      wrap.appendChild(rm);
+      grid.appendChild(wrap);
+    });
+
+    if (screenshotFiles.length > 0) {
+      screenshotsDropArea.classList.add('has-files');
+      count.style.display = 'block';
+      count.textContent = `${screenshotFiles.length} screenshot${screenshotFiles.length > 1 ? 's' : ''} selected`;
+    } else {
+      screenshotsDropArea.classList.remove('has-files');
+      count.style.display = 'none';
+    }
+  }
+
+  // Attach screenshot files to FormData manually since we manage our own array
+  function appendScreenshotsToFormData(fd) {
+    screenshotFiles.forEach(file => fd.append('screenshots', file));
+  }
+
+  // APK: show name and calculate file size
+  document.getElementById('apk-input').addEventListener('change', function () {
+    const label = document.getElementById('apk-label');
+    const icon = document.getElementById('apk-icon');
+    const sizeDisplay = document.getElementById('size-display');
+    const sizeHidden = document.getElementById('size-hidden');
+
+    if (this.files[0]) {
+      const file = this.files[0];
+      label.textContent = file.name;
+      icon.textContent = 'ok';
+      document.getElementById('zone-apk').classList.add('has-file');
+
+      // Calculate and display size
+      const bytes = file.size;
+      let sizeStr;
+      if (bytes >= 1024 * 1024 * 1024) {
+        sizeStr = (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+      } else if (bytes >= 1024 * 1024) {
+        sizeStr = (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      } else {
+        sizeStr = (bytes / 1024).toFixed(0) + ' KB';
+      }
+
+      sizeDisplay.textContent = sizeStr;
+      sizeDisplay.classList.add('has-value');
+      sizeHidden.value = sizeStr;
+    }
+  });
+
+  // Toast notifications
+  function showToast(message, type = 'success', duration = 5000) {
+    const wrap = document.getElementById('toast-wrap');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<span class="toast-msg">${message}</span>`;
+    wrap.appendChild(toast);
+    if (duration > 0) setTimeout(() => toast.remove(), duration);
+    return toast;
+  }
+
+  // Progress bar
+  function setProgress(pct) {
+    const wrap = document.getElementById('progress-wrap');
+    const bar = document.getElementById('progress-bar');
+    wrap.classList.toggle('visible', pct > 0 && pct < 100);
+    bar.style.width = pct + '%';
+  }
+
+  // Form submit
+  document.getElementById('add-app-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const submitBtn = document.getElementById('submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Uploading...';
+
+    const loadingToast = showToast('Uploading files and saving app...', 'loading', 0);
+    setProgress(30);
+
+    // Handle custom type
+    const typeSelect = document.getElementById('type-select');
+    const typeInput = document.querySelector('input[name="typeCustom"]');
+    if (typeSelect.value === 'custom' && typeInput.value.trim()) {
+      typeSelect.name = '_type_disabled';
+      const hidden = document.createElement('input');
+      hidden.type = 'hidden';
+      hidden.name = 'type';
+      hidden.value = typeInput.value.trim();
+      this.appendChild(hidden);
+    }
+
+    const formData = new FormData(this);
+    // attach screenshots from our custom array (fixes multi-upload)
+    appendScreenshotsToFormData(formData);
+
+    try {
+      setProgress(60);
+      const response = await fetch('/api/add-app', { method: 'POST', body: formData });
+      setProgress(90);
+      const result = await response.json();
+      setProgress(100);
+      loadingToast.remove();
+
+      if (result.success) {
+        showToast(result.message, 'success');
+        showToast(`App ID: <strong>${result.appId}</strong> — Run git add . && git push to go live.`, 'success', 8000);
+        writeLog('add', `Added app: ${formData.get('appName')}`, `ID: ${result.appId} | Category: ${formData.get('type')} | Version: ${formData.get('version')}`);
+        this.reset();
+        screenshotFiles = [];
+        renderScreenshotPreviews();
+        resetFormUI();
+        loadSidebarStats();
+      } else {
+        showToast(result.message, 'error');
+      }
+    } catch (err) {
+      loadingToast.remove();
+      showToast('Could not connect to admin server. Make sure node admin-server.js is running.', 'error', 8000);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Add App to Store';
+      setTimeout(() => setProgress(0), 800);
+    }
+  });
+
+  // Reset form UI
+  function resetFormUI() {
+    document.querySelectorAll('.upload-preview').forEach(p => { p.src = ''; p.classList.remove('visible'); });
+    document.querySelectorAll('.upload-zone').forEach(z => z.classList.remove('has-file'));
+    screenshotsDropArea.classList.remove('has-files');
+    document.getElementById('screenshots-preview').innerHTML = '';
+    document.getElementById('screenshots-count').style.display = 'none';
+    document.getElementById('apk-label').textContent = 'Click to upload APK';
+    document.getElementById('apk-icon').textContent = 'apk';
+    document.getElementById('featured-toggle').classList.remove('on');
+    document.getElementById('featured-val').value = 'false';
+    document.getElementById('featured-label').textContent = 'Not Featured';
+    document.getElementById('rating-range').value = 5;
+    document.getElementById('rating-display').textContent = '5.0';
+    document.getElementById('id-preview').style.display = 'none';
+    document.getElementById('lastUpdated').valueAsDate = new Date();
+    document.getElementById('custom-type-field').style.display = 'none';
+
+    // Reset size display
+    const sizeDisplay = document.getElementById('size-display');
+    sizeDisplay.textContent = 'Upload APK to calculate';
+    sizeDisplay.classList.remove('has-value');
+    document.getElementById('size-hidden').value = '';
+  }
+
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if (confirm('Reset all form fields?')) {
+      document.getElementById('add-app-form').reset();
+      resetFormUI();
+    }
+  });
+
+  // Load app list
+  async function loadAppList() {
+    const listEl = document.getElementById('app-list');
+    listEl.innerHTML = '<div class="empty-list">Loading...</div>';
+
+    try {
+      const res = await fetch('/api/apps');
+      const data = await res.json();
+
+      if (!data.success || data.apps.length === 0) {
+        listEl.innerHTML = '<div class="empty-list"><p>No apps yet. Add your first app!</p></div>';
+        return;
+      }
+
+      listEl.innerHTML = '';
+      data.apps.forEach(app => {
+        const item = document.createElement('div');
+        item.className = 'app-list-item';
+        item.innerHTML = `
+          <img class="app-list-icon"
+               src="${app.detailIcon || 'generalImages/default-app-icon.png'}"
+               alt="${app.appName}"
+               onerror="this.src='generalImages/default-app-icon.png'">
+          <div class="app-list-info">
+            <div class="app-list-name">${app.appName}</div>
+            <div class="app-list-meta">${app.developer || '-'} · ${app.type || '-'} · v${app.version || '-'} · ID: ${app.id}</div>
+          </div>
+          <div class="app-list-actions">
+            <a href="app-details.html?id=${app.id}" target="_blank"
+               style="padding:5px 14px;border-radius:8px;font-size:0.75rem;font-weight:600;border:1px solid var(--border);color:var(--text-2);transition:var(--trans);">
+              View
+            </a>
+            <button class="btn-edit" onclick="openEditModal(${JSON.stringify(app).replace(/"/g, '&quot;')})">
+              Edit
+            </button>
+            <button class="btn-delete" onclick="deleteApp('${app.id}', '${app.appName}')">
+              Delete
+            </button>
+          </div>
+        `;
+        listEl.appendChild(item);
+      });
+    } catch (err) {
+      listEl.innerHTML = '<div class="empty-list">Could not load apps. Is the server running?</div>';
+    }
+  }
+
+  // Delete app
+  async function deleteApp(appId, appName) {
+    if (!confirm(`Remove "${appName}" from the store?\n\nNote: image and APK files are not deleted from disk.`)) return;
+
+    try {
+      const res = await fetch('/api/delete-app', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ appId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, 'success');
+        writeLog('delete', `Deleted app: ${appName}`, `ID: ${appId}`);
+        loadAppList();
+        loadSidebarStats();
+      } else {
+        showToast(data.message, 'error');
+      }
+    } catch {
+      showToast('Could not connect to server.', 'error');
+    }
+  }
+
+  // Sidebar stats
+  async function loadSidebarStats() {
+    try {
+      const res = await fetch('/api/apps');
+      const data = await res.json();
+      if (!data.success) return;
+      const cats = new Set(data.apps.map(a => a.type).filter(Boolean));
+      document.getElementById('sidebar-total').textContent = data.apps.length;
+      document.getElementById('sidebar-cats').textContent = cats.size;
+    } catch { /* server may not be ready */ }
+  }
+
+  loadSidebarStats();
+
+  // ---- Edit modal ----
+  const editOverlay  = document.getElementById('edit-modal-overlay');
+  const editForm     = document.getElementById('edit-app-form');
+
+  // Close modal
+  function closeEditModal() { editOverlay.classList.remove('open'); }
+  document.getElementById('modal-close-btn').addEventListener('click', closeEditModal);
+  document.getElementById('modal-cancel-btn').addEventListener('click', closeEditModal);
+  editOverlay.addEventListener('click', e => { if (e.target === editOverlay) closeEditModal(); });
+
+  // Edit rating slider
+  const editRatingRange = document.getElementById('edit-rating-range');
+  const editRatingDisplay = document.getElementById('edit-rating-display');
+  editRatingRange.addEventListener('input', () => {
+    editRatingDisplay.textContent = parseFloat(editRatingRange.value).toFixed(1);
+  });
+
+  // Edit featured toggle
+  const editFeaturedToggle = document.getElementById('edit-featured-toggle');
+  const editFeaturedVal    = document.getElementById('edit-featured-val');
+  const editFeaturedLabel  = document.getElementById('edit-featured-label');
+  editFeaturedToggle.addEventListener('click', () => {
+    const isOn = editFeaturedToggle.classList.toggle('on');
+    editFeaturedVal.value = isOn ? 'true' : 'false';
+    editFeaturedLabel.textContent = isOn ? 'Featured' : 'Not Featured';
+  });
+
+  // Edit image previews
+  function setupEditImagePreview(zoneId, previewId) {
+    const zone  = document.getElementById(zoneId);
+    const input = zone.querySelector('input[type=file]');
+    const prev  = document.getElementById(previewId);
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (!file) return;
+      prev.src = URL.createObjectURL(file);
+      prev.classList.add('visible');
+      zone.classList.add('has-file');
+    });
+  }
+
+  setupEditImagePreview('edit-zone-home',   'edit-prev-home');
+  setupEditImagePreview('edit-zone-icon',   'edit-prev-icon');
+  setupEditImagePreview('edit-zone-banner', 'edit-prev-banner');
+
+  // APK replace label
+  document.getElementById('edit-apk-input').addEventListener('change', function () {
+    if (this.files[0]) {
+      document.getElementById('edit-apk-label').textContent = this.files[0].name;
+      document.getElementById('edit-apk-icon').textContent  = 'ok';
+      document.getElementById('edit-zone-apk').classList.add('has-file');
+    }
+  });
+
+  // Open modal and pre-fill fields from app data
+  function openEditModal(app) {
+    // Basic fields
+    document.getElementById('edit-appId').value            = app.id || '';
+    document.getElementById('edit-appName').value          = app.appName || '';
+    document.getElementById('edit-developer').value        = app.developer || '';
+    document.getElementById('edit-version').value          = app.version || '';
+    document.getElementById('edit-minAndroid').value       = app.minAndroid || '';
+    document.getElementById('edit-shortDescription').value = app.shortDescription || '';
+    document.getElementById('edit-description').value      = app.description || '';
+    document.getElementById('edit-playStoreLink').value    = app.playStoreLink || '';
+
+    // Date
+    if (app.lastUpdated) {
+      try { document.getElementById('edit-lastUpdated').value = app.lastUpdated.substring(0, 10); }
+      catch { document.getElementById('edit-lastUpdated').value = ''; }
+    }
+
+    // Category
+    const typeEl = document.getElementById('edit-type');
+    const knownVals = Array.from(typeEl.options).map(o => o.value);
+    typeEl.value = knownVals.includes(app.type) ? app.type : '';
+
+    // Rating
+    const rating = parseFloat(app.rating) || 5;
+    editRatingRange.value = rating;
+    editRatingDisplay.textContent = rating.toFixed(1);
+
+    // Featured
+    const isFeatured = app.featured === true || app.featured === 'true';
+    editFeaturedToggle.classList.toggle('on', isFeatured);
+    editFeaturedVal.value = isFeatured ? 'true' : 'false';
+    editFeaturedLabel.textContent = isFeatured ? 'Featured' : 'Not Featured';
+
+    // Reset file inputs and previews
+    editForm.querySelectorAll('input[type=file]').forEach(i => { i.value = ''; });
+    document.querySelectorAll('#edit-app-form .upload-preview').forEach(p => { p.src = ''; p.classList.remove('visible'); });
+    document.querySelectorAll('#edit-app-form .upload-zone').forEach(z => z.classList.remove('has-file'));
+    document.getElementById('edit-apk-label').textContent = 'Click to replace APK';
+    document.getElementById('edit-apk-icon').textContent  = 'apk';
+
+    editOverlay.classList.add('open');
+    // Scroll modal to top
+    editOverlay.querySelector('.modal').scrollTop = 0;
+  }
+
+  // Save edit
+  document.getElementById('edit-save-btn').addEventListener('click', async () => {
+    if (!editForm.checkValidity()) { editForm.reportValidity(); return; }
+
+    const saveBtn = document.getElementById('edit-save-btn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+
+    const loadingToast = showToast('Saving changes...', 'loading', 0);
+    const formData = new FormData(editForm);
+
+    try {
+      const res    = await fetch('/api/edit-app', { method: 'POST', body: formData });
+      const result = await res.json();
+      loadingToast.remove();
+
+      if (result.success) {
+        const appName = formData.get('appName');
+        showToast(result.message || 'App updated successfully.', 'success');
+        writeLog('edit', `Edited app: ${appName}`, `ID: ${formData.get('appId')}`);
+        closeEditModal();
+        loadAppList();
+        loadSidebarStats();
+      } else {
+        showToast(result.message || 'Update failed.', 'error');
+      }
+    } catch {
+      loadingToast.remove();
+      showToast('Could not connect to admin server.', 'error');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save Changes';
+    }
+  });
+
+  // ---- Logs system (stored in localStorage) ----
+  const LOG_KEY = 'appvault_admin_logs';
+
+  function getLogs() {
+    try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; }
+    catch { return []; }
+  }
+
+  function saveLogs(logs) {
+    localStorage.setItem(LOG_KEY, JSON.stringify(logs));
+  }
+
+  // type: 'add' | 'delete' | 'system'
+  function writeLog(type, action, detail) {
+    const logs = getLogs();
+    logs.unshift({ type, action, detail: detail || '', time: new Date().toISOString() });
+    if (logs.length > 200) logs.splice(200);
+    saveLogs(logs);
+  }
+
+  function formatLogTime(iso) {
+    const d = new Date(iso);
+    const date = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return `${date} ${time}`;
+  }
+
+  let activeFilter = 'all';
+
+  function renderLogs() {
+    const listEl = document.getElementById('log-list');
+    const logs = getLogs();
+    const filtered = activeFilter === 'all' ? logs : logs.filter(l => l.type === activeFilter);
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<div class="empty-list">No log entries found.</div>';
+      return;
+    }
+
+    listEl.innerHTML = '';
+    filtered.forEach(entry => {
+      const el = document.createElement('div');
+      el.className = 'log-entry';
+      el.innerHTML = `
+        <div class="log-dot ${entry.type}"></div>
+        <div class="log-body">
+          <div class="log-action">${entry.action}</div>
+          ${entry.detail ? `<div class="log-detail">${entry.detail}</div>` : ''}
+        </div>
+        <div class="log-time">${formatLogTime(entry.time)}</div>
+      `;
+      listEl.appendChild(el);
+    });
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      renderLogs();
+    });
+  });
+
+  // Clear logs button
+  document.getElementById('btn-clear-logs').addEventListener('click', () => {
+    if (confirm('Clear all log entries? This cannot be undone.')) {
+      saveLogs([]);
+      renderLogs();
+    }
+  });
+
+  // Hook logs panel into nav
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (item.dataset.panel === 'logs-panel') renderLogs();
+    });
+  });
+
+  // Write one session-start log
+  if (!sessionStorage.getItem('av_session')) {
+    writeLog('system', 'Admin panel opened', `Session started`);
+    sessionStorage.setItem('av_session', '1');
+  }
+</script>
+</body>
+</html>

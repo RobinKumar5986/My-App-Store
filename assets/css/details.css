@@ -192,9 +192,11 @@
 .detail-layout {
   padding: 0 2rem 4rem;
   display: grid;
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: 1fr 300px; /* Fixed sidebar width */
   gap: 2rem;
   align-items: start;
+  max-width: 1280px; /* Limit max width to prevent stretching */
+  margin: 0 auto;
   animation: fadeUp 0.6s ease 0.1s both;
 }
 
@@ -208,7 +210,8 @@
   flex-direction: column;
   gap: 0;
   position: sticky;
-  top: 80px;
+  top: 84px; /* Slightly more space from navbar */
+  min-width: 0; /* Prevents flex overflow */
 }
 
 .info-row {
@@ -219,7 +222,7 @@
   border-bottom: 1px solid var(--card-border);
 }
 
-.info-row:last-child {
+.info-row:last-of-type {
   border-bottom: none;
 }
 
@@ -229,6 +232,7 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 500;
+  padding-right: 10px;
 }
 
 .info-value {
@@ -236,17 +240,26 @@
   color: var(--text-primary);
   font-weight: 500;
   text-align: right;
+  word-break: break-word; /* Prevents long text from clipping */
 }
 
 /* Android badge in panel */
 .android-badge-wrap {
   margin-top: 1.25rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  justify-content: center;
+}
+
+.android-badge-wrap:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
 .android-badge-wrap img {
-  width: 140px;
+  width: 160px;
   height: auto;
-  margin: 0 auto;
 }
 
 /* ── Main Content ── */
@@ -254,6 +267,7 @@
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  min-width: 0; /* Important for horizontal scrolling child elements */
 }
 
 /* Description */
@@ -402,6 +416,7 @@
   }
   .info-panel {
     position: static;
+    width: 100%;
   }
 }
 
@@ -414,14 +429,107 @@
   }
   .app-header-inner {
     flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  .app-header-icon {
+    margin: 0 auto;
   }
   .app-header-actions {
     width: 100%;
+    justify-content: center;
   }
   .detail-banner {
     height: 220px;
   }
   .rating-block {
     flex-wrap: wrap;
+    justify-content: center;
   }
+  .rating-divider {
+    display: none;
+  }
+}
+
+/* ── Lightbox Modal ── */
+.lightbox-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  /* Transparent dark background */
+  background: rgba(0, 0, 0, 0.25);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+  animation: fadeIn 0.3s ease;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.lightbox-img {
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+}
+
+.lightbox-modal.active .lightbox-img {
+  transform: scale(1);
+}
+
+/* Simplified Navigation Buttons */
+.lb-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 10000;
+}
+
+.lb-btn:hover {
+  background: var(--green-primary);
+  border-color: var(--green-light);
+}
+
+.lb-prev { left: 20px; }
+.lb-next { right: 20px; }
+
+/* Hide buttons if they are disabled (at ends of list) */
+.lb-btn:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .lb-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .lb-prev { left: 10px; }
+  .lb-next { right: 10px; }
 }

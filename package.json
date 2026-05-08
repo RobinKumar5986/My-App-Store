@@ -1,0 +1,13 @@
+{
+  "name": "appvault-admin",
+  "version": "1.0.0",
+  "description": "Local admin server for AppVault — add apps without manual file editing",
+  "main": "admin-server.js",
+  "scripts": {
+    "admin": "node admin-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
