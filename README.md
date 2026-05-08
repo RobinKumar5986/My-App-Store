@@ -76,16 +76,6 @@ Whether you're sharing your own Android apps, tools, or utilities with friends a
 
 ---
 
-## 📸 Screenshots
-
-<div align="center">
-
-| Home Page | App Listing |
-|-----------|-------------|
-| *Browse all apps in a beautiful grid layout* | *Filter and search across categories* |
-
-</div>
-
 > 📌 *Visit the [live site](https://robinkumar5986.github.io/My-App-Store/) to see it in action!*
 
 ---
