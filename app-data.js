@@ -110,7 +110,7 @@ const ALL_APPS = [
       "appsImages/all-ai/screenshots/screen-6.jpeg",
       "appsImages/all-ai/screenshots/screen-7.jpeg"
     ],
-    apkFile:          "AllApk/all-ai.apk",
+    apkFile:          "https://drive.google.com/drive/folders/1mQr0gtSr9rkUlL2TNAgpC3hhPF18iW1P?usp=sharing",
     featured:         true,
     playStoreLink:    ""
   }
