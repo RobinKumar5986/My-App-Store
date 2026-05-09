@@ -65,7 +65,7 @@ const ALL_APPS = [
     id:               "unplug",
     appName:          "Unplug",
     developer:        "Robin Kumar",
-    type:             "Spy",
+    type:             "Wellbing",
     rating:           5,
     reviews:          0,
     version:          "1.0.0",
