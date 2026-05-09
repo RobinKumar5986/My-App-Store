@@ -83,5 +83,35 @@ const ALL_APPS = [
     apkFile:          "AllApk/unplug.apk",
     featured:         true,
     playStoreLink:    ""
+  },
+
+  {
+    id:               "all-ai",
+    appName:          "All Ai",
+    developer:        "Robin Kumar",
+    type:             "Tools",
+    rating:           5,
+    reviews:          0,
+    version:          "1.0.0",
+    size:             "322.0 MB",
+    lastUpdated:      "2026-05-09",
+    minAndroid:       "24.0",
+    description:      "All AI — The Ultimate AI Experience\r\nWelcome to All AI, the most powerful AI application that brings cutting-edge artificial intelligence features together in one seamless experience. Whether you are a tech enthusiast, developer, student, or just curious about AI, All AI is built for everyone.\r\n\r\nWhat Can All AI Do?\r\n👁️ Face Identification\r\nInstantly detect and identify faces in real time with high accuracy, whether it is a single face or a crowd.\r\n✋ Hand Gesture Recognition\r\nControl and interact using just your hands. All AI reads your gestures in real time, opening up a whole new way to interact without touching a button.\r\n🎨 Color Tracking\r\nPoint your camera at anything and let All AI detect and track colors in real time. Perfect for designers, artists, and curious minds.\r\n🧠 And Many More Features Coming Soon\r\n\r\nWhy All AI?\r\n\r\n✅ All AI features in one single app\r\n✅ Clean and simple interface anyone can use\r\n✅ Real time processing with no lag\r\n✅ Regularly updated with new AI features\r\n✅ Built for both beginners and tech enthusiasts",
+    shortDescription: "All AI — One app, every AI superpower at your fingertips.",
+    homePageImage:    "appsImages/all-ai/home-card-image.png",
+    detailIcon:       "appsImages/all-ai/detail-icon.png",
+    descriptionBanner:"appsImages/all-ai/description-banner.png",
+    screenshots:      [
+      "appsImages/all-ai/screenshots/screen-1.jpeg",
+      "appsImages/all-ai/screenshots/screen-2.jpeg",
+      "appsImages/all-ai/screenshots/screen-3.jpeg",
+      "appsImages/all-ai/screenshots/screen-4.jpeg",
+      "appsImages/all-ai/screenshots/screen-5.jpeg",
+      "appsImages/all-ai/screenshots/screen-6.jpeg",
+      "appsImages/all-ai/screenshots/screen-7.jpeg"
+    ],
+    apkFile:          "AllApk/all-ai.apk",
+    featured:         true,
+    playStoreLink:    ""
   }
 ];
