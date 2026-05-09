@@ -9,16 +9,16 @@
 const ALL_APPS = [
   {
     id:               "safe-circle",
-    appName:          "Safe Circle Test 2",
+    appName:          "Safe Circle",
     developer:        "Robin Kumar",
     type:             "Tools",
     rating:           5,
     reviews:          0,
     version:          "1.2.1",
     size:             "16.4 MB",
-    lastUpdated:      "2026-04-29",
+    lastUpdated:      "2026-05-09",
     minAndroid:       "21.0",
-    description:      "Safe Circle is a family and friends safety app designed to keep your loved ones secure and connected at all times. With Safe Circle, you can create multiple groups and invite people to join, allowing everyone in the group to share their real-time location easily and privately.\r\n\r\nThis app helps you know where your family members and friends are, giving you peace of mind and ensuring their safety. Whether it’s daily check-ins or emergency situations, Safe Circle provides reliable real-time tracking so you can act quickly if someone is in trouble.\r\n\r\nKey Features:\r\n\r\nCreate and manage multiple groups for family, friends, or any community.\r\n\r\nReal-time location sharing within groups for continuous safety monitoring.\r\n\r\nQuick and easy group joining through invitations.\r\n\r\nDesigned with privacy and security in mind; location data is shared only with trusted group members.\r\n\r\nEfficient activity recognition triggers location updates to save battery while ensuring accurate tracking.\r\n\r\nNo need for passwords or complicated logins — sign in securely with your Google account.\r\n\r\nSafe Circle is perfect for families, friends, caregivers, and anyone who values safety and staying connected. Download now to protect what matters most!\r\n",
+    description:      "Safe Circle is a safety and connectivity app designed to keep families and friends connected in real time. With its powerful location-sharing features, Safe Circle helps you stay reassured about the safety of your loved ones, wherever they are.\r\n\r\nWhether you’re making sure your kids reach school safely, keeping track of family members during travel, or just staying connected with friends, Safe Circle provides a secure, private, and reliable way to share your location only with the people you trust.\r\n\r\nKey Features\r\nReal-time Location Sharing – Share your live location with trusted family and friends to ensure safety and peace of mind.\r\n\r\nBackground Tracking – With your permission, Safe Circle continues sharing your location even when the app is running in the background, so your loved ones always know you’re safe.\r\n\r\nFamily Privacy First – Your location and personal data are never sold or shared with advertisers. Information is visible only to the people you choose.\r\n\r\nSecure Authentication – Sign in securely using Firebase Authentication with your email address.\r\n\r\nData Encryption – All shared data is encrypted and stored securely to keep your information private.\r\n\r\nUser Control – You decide when and with whom you share your location. You can turn off location sharing anytime.\r\n\r\nWhy Choose Safe Circle?\r\nSafe Circle is built with families and safety in mind. Unlike social media apps, Safe Circle is focused purely on security, privacy, and trust. We respect your data and ensure it’s used only to deliver essential safety features.\r\n\r\n\r\nWith Safe Circle, you’re not just sharing a location—you’re building a safety net that keeps your circle of loved ones connected and protected.\r\n\r\n\r\n",
     shortDescription: "Safety starts with understanding how developers collect and share your data.",
     homePageImage:    "appsImages/safe-circle/home-card-image.png",
     detailIcon:       "appsImages/safe-circle/detail-icon.webp",
@@ -34,5 +34,54 @@ const ALL_APPS = [
     apkFile:          "AllApk/safe-circle.apk",
     featured:         true,
     playStoreLink:    "https://play.google.com/store/apps/details?id=com.kgjr.safecircle"
+  },
+
+  {
+    id:               "upi-spy",
+    appName:          "UPI Spy",
+    developer:        "Robin Kumar",
+    type:             "Spy",
+    rating:           5,
+    reviews:          0,
+    version:          "1.0.0",
+    size:             "10.2 MB",
+    lastUpdated:      "2026-05-09",
+    minAndroid:       "24.0",
+    description:      "UpiSpy 🔍\r\n⚠️ Security Research & Educational Project Only\r\n\r\nUpiSpy is a research-oriented Android application created to explore and understand potential security risks, data exposure points, and privacy concerns in mobile payment ecosystems.\r\n\r\nThe purpose of this project is to learn, analyze, and raise awareness about how sensitive user data could be exposed if proper safeguards are not implemented.\r\n\r\n🚀 Features (Research Scope)\r\nBackground service behavior analysis\r\nStudy of app visibility and launcher behavior\r\nExploration of inter-app communication patterns\r\nUnderstanding Android permission models\r\nLogging and monitoring simulated data flows (non-sensitive)\r\n🎯 Objective\r\nThis project aims to:\r\n\r\nHelp developers understand security gaps\r\nPromote secure coding practices\r\nHighlight importance of user data protection\r\nEncourage ethical hacking and responsible disclosure\r\n⚠️ Disclaimer\r\nThis project is created strictly for educational and research purposes only.\r\n\r\n❌ Do NOT use this project for any malicious activity\r\n❌ Do NOT attempt to collect or misuse real user data\r\n❌ Do NOT deploy this on devices without proper consent\r\nThe author does NOT support or encourage any illegal activities.\r\n\r\nAny misuse of this code is solely the responsibility of the individual using it.\r\nThe author shall not be held liable for any damage, legal issues, or misuse arising from this project.\r\n\r\n🔐 Ethical Use\r\nIf you discover any vulnerabilities while working on this project:\r\n\r\nReport them responsibly to the respective platform/app owners\r\nFollow Responsible Disclosure practices\r\nAlways prioritize user privacy and safety\r\n🛠️ Tech Stack\r\nAndroid (Jetpack / Kotlin / Java)\r\nBackground Services\r\nPermission Handling\r\nLogging & Debugging Tools\r\n📚 Learning Outcomes\r\nAndroid security fundamentals\r\nApp sandboxing and permission systems\r\nSecure handling of sensitive data\r\nEthical boundaries in cybersecurity\r\n📌 Note\r\nThis project is a prototype and does NOT interact with real financial data.\r\nAll demonstrations should be done in a controlled and safe environment.\r\n\r\n👨‍💻 Author\r\nRobin Kumar\r\n\r\n⭐ Final Words\r\n\"With great power comes great responsibility.\"\r\n\r\nUse your knowledge to build secure systems, not to break them.",
+    shortDescription: "Its a spy application which can be used to jail break the UPI application and steel UPI pins.",
+    homePageImage:    "appsImages/upi-spy/home-card-image.png",
+    detailIcon:       "appsImages/upi-spy/detail-icon.png",
+    descriptionBanner:"appsImages/upi-spy/description-banner.png",
+    screenshots:      [
+      "appsImages/upi-spy/screenshots/screen-1.jpeg",
+      "appsImages/upi-spy/screenshots/screen-2.jpeg"
+    ],
+    apkFile:          "AllApk/upi-spy.apk",
+    featured:         true,
+    playStoreLink:    ""
+  },
+
+  {
+    id:               "unplug",
+    appName:          "Unplug",
+    developer:        "Robin Kumar",
+    type:             "Spy",
+    rating:           5,
+    reviews:          0,
+    version:          "1.0.0",
+    size:             "10.8 MB",
+    lastUpdated:      "2026-05-09",
+    minAndroid:       "24.0",
+    description:      "Unplug — Break the Scroll Cycle\r\nYou open Instagram for a second. Forty minutes later, you're still there. Sound familiar?\r\nUnplug is a lightweight Android app that helps you take back control of your time by intelligently monitoring and limiting short-form content like Instagram Reels and YouTube Shorts — the biggest scroll traps on your phone.\r\nUsing Android's Accessibility Service, Unplug runs quietly in the background and steps in the moment you hit your self-set time limit. No hard blocks. No deleted apps. Just firm, consistent boundaries that you define.\r\nWhat makes Unplug different:\r\n\r\nTargets Reels & Shorts specifically — not the whole app\r\nSet custom daily or session limits per platform\r\nLightweight with minimal battery impact\r\n100% private — no data collected, ever\r\nClean, minimal interface that stays out of your way\r\n\r\nUnplug isn't about punishing yourself for using your phone. It's about making sure the algorithm doesn't decide how long you stay. You do.\r\nSet your limit. Unplug. Live more intentionally.",
+    shortDescription: "Unplug is a lightweight Android productivity tool designed to break the cycle of infinite scrolling.",
+    homePageImage:    "appsImages/unplug/home-card-image.png",
+    detailIcon:       "appsImages/unplug/detail-icon.webp",
+    descriptionBanner:"appsImages/unplug/description-banner.png",
+    screenshots:      [
+      "appsImages/unplug/screenshots/screen-1.jpeg"
+    ],
+    apkFile:          "AllApk/unplug.apk",
+    featured:         true,
+    playStoreLink:    ""
   }
 ];
